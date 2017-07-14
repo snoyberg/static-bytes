@@ -31,6 +31,7 @@ import qualified Data.ByteString as B
 import qualified Data.ByteString.Internal as B
 import qualified Data.Vector.Primitive as VP
 import qualified Data.Vector.Unboxed as VU
+import qualified Data.Vector.Unboxed.Base as VU
 import qualified Data.Vector.Storable as VS
 import GHC.Generics
 import Control.DeepSeq
@@ -43,7 +44,6 @@ import Data.Bits
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Data.Primitive.ByteArray as BA
-import Unsafe.Coerce
 
 newtype Bytes8 = Bytes8 Word64
   deriving (Eq, Ord, Generic, NFData, Hashable)
@@ -136,8 +136,8 @@ instance word8 ~ Word8 => DynamicBytes (VP.Vector word8) where
 
 instance word8 ~ Word8 => DynamicBytes (VU.Vector word8) where
   lengthD = VU.length
-  fromWordsD len words = unsafeCoerce (fromWordsD len words :: VP.Vector Word8)
-  withPeekD v = withPeekD (unsafeCoerce v :: VP.Vector Word8)
+  fromWordsD len words = VU.V_Word8 (fromWordsD len words)
+  withPeekD (VU.V_Word8 v) = withPeekD v
 
 class StaticBytes sbytes where
   lengthS :: proxy sbytes -> Int -- use type level literals instead?
