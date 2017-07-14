@@ -1,0 +1,36 @@
+name: static-bytes
+version: '0.1.0.0'
+category: Data
+author: Michael Snoyman
+maintainer: michael@snoyman.com
+license: MIT
+github: snoyberg/static-bytes
+extra-source-files:
+- README.md
+- ChangeLog.md
+
+dependencies:
+- base >= 4.7 && < 5
+- bytestring
+- vector
+- deepseq
+- hashable
+- text
+- primitive
+
+library:
+  source-dirs: src
+  exposed-modules:
+  - StaticBytes
+
+tests:
+  static-bytes-test:
+    main: Spec.hs
+    source-dirs: test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - hspec
+    - static-bytes
